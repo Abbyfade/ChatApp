@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheChatRoom</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chatApp/base.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'chatApp/favicon.png' %}">
+</head>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img class="logo" src="{% static 'chatApp/lets-chat.png' %}" alt="">
+            <h1>Chats</h1>
+            <img class="menu-btn" id="menuToggle" src="{% static 'chatApp/hamburger.png' %}" alt="">
+            <div class="dropdown-menu" id="dropdownMenu">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item">Log Out</button>
+                </form>
+            </div>
+        </div>
+
+        <ul class="chat-list">
+        </ul>
+        <a href="{% url 'user_list' %}">
+            <img class="add-chat" src="{% static 'chatApp/add-chat.svg' %}" alt="Add Chat">
+        </a>
+        
+            
+    </div>
+    <script>
+        // JavaScript to toggle the dropdown menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            menuToggle.addEventListener('click', function() {
+                // Toggle the display of the dropdown menu
+                if (dropdownMenu.style.display === 'block') {
+                    dropdownMenu.style.display = 'none';
+                } else {
+                    dropdownMenu.style.display = 'block';
+                }
+            });
+
+            // Close the menu if clicked outside
+            document.addEventListener('click', function(event) {
+                if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.style.display = 'none';
+                }
+            });
+        });
+
+        const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat-list/`);
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if (data.type === 'chat_list_update') {
+                const chatList = data.chat_list;
+                const chatListContainer = document.querySelector('.chat-list');
+                chatListContainer.innerHTML = '';  // Clear the existing chat list
+    
+                chatList.forEach(chat => {
+                    const chatItem = `
+                        <li class="chat-item" onclick="location.href='/chat/start/${chat.friend_name}'">
+                            <div class="chat-info">
+                                <strong>${chat.friend_name}</strong>
+                                <div>${chat.most_recent_message}</div>
+                            </div>
+                            <div class="chat-timestamp">
+                                ${chat.timestamp || 'No messages yet'}
+                            </div>
+                        </li>
+                    `;
+                    chatListContainer.insertAdjacentHTML('beforeend', chatItem);  // Append the new chat item
+                });
+            } else {
+                // Handle other message types (e.g., new messages)
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+<!-- {% for chat in chat_list %}
+                <li class="chat-item" onclick="location.href='{% url 'start_chat' chat.friend_name %}'">
+                    <div class="chat-info">
+                        <strong>{{ chat.friend_name }}</strong>
+                        <div>{{ chat.most_recent_message }}</div>
+                    </div>
+                    <div class="chat-timestamp">
+                        {% if chat.timestamp %}
+                            {{ chat.timestamp }}
+                        {% else %}
+                            No messages yet
+                        {% endif %}
+                    </div>
+                </li>
+            {% empty %}
+                <li>No chats available.</li>
+            {% endfor %} -->

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'chatApp/home.css' %}"> <!-- Your custom CSS -->
+        <link rel="icon" type="image/png" href="{% static 'chatApp/favicon.png' %}">
+    </head>
+    <body>
+        <div class="container">
+            <img src="{% static 'chatApp/lets-chat.png' %}" alt="letschat"/>
+            <h1>ChatApp</h1>
+            <p>Communication without limits...</p>
+            <a class="sign-up" href="{% url 'authView' %}">Sign Up</a>
+            <p>Already have an account? <a class="login" href="{% url 'login' %}">Login</a></p>
+        </div>
+    </body>
+</html>

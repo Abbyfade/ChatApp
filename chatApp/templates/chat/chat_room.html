@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chatApp/chat_room.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'chatApp/favicon.png' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ friend_username }}</h1>
+            <img class="menu-btn" id="menuToggle" src="{% static 'chatApp/hamburger.png' %}" alt="">
+        </div>
+        
+        <div id="chat-log">
+            {% for message in messages %}
+                    <div class="message {% if message.user.username == username %}sent{% else %}received{% endif %}">
+                        <div class="message-content">{{ message.content }}</div>
+                        <div class="message-timestamp">{{ message.timestamp|date:"H:i" }}</div>
+                    </div>
+                {% endfor %}
+        </div>
+        <input id="chat-message-input" type="text" placeholder="Type your message here...">
+        <button id="chat-message-submit">Send</button>
+    </div>
+
+    <script>
+        // const urlParams = new URLSearchParams(window.location.search);
+        const roomId = '{{ room_id }}';
+        const username = '{{ username }}';
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomId + '/'
+        );
+        chatSocket.onopen = function (e) {
+            console.log("The connection was setup successfully !");
+        };
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('chat-log');
+        
+            // Scroll to the bottom on initial load
+            container.scrollTop = container.scrollHeight;
+        
+            chatSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+        
+                // Create a new message element
+                const message = document.createElement('div');
+                message.className = `message ${data.username === username ? 'sent' : 'received'}`;
+        
+                // Format timestamp
+                const timestamp = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        
+                // Set the message HTML
+                message.innerHTML = `
+                    <div class="message-content">${data.message}</div>
+                    <div class="message-timestamp">${timestamp}</div>
+                `;
+        
+                // Append the new message to the container
+                container.appendChild(message);
+        
+                // Scroll to the bottom
+                container.scrollTop = container.scrollHeight;
+            };
+        });
+        
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            const messageContent = messageInputDom.value.trim();
+            if (messageContent) {
+                const now = new Date();
+                const container = document.querySelector('#chat-log');
+                const timestamp = now.toISOString();
+                container.scrollTop = container.scrollHeight;
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'room_id': roomId,
+                    'username': username,
+                    'timestamp': timestamp,
+                }));
+                messageInputDom.value = '';
+            };
+        };
+    </script>
+</body>
+</html>

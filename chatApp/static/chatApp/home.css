@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    background-image: linear-gradient(180.54deg, #FFFFFF -4.05%, #69A5F7 304.57%);
+}
+
+.container{
+    margin:auto;
+    width:30%;
+    text-align: center;
+}
+
+img {
+    width: 266px;
+    height: 266px;
+    display:block;
+    margin: auto;
+}
+
+.container h1 {
+    font-family: Inter;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 58.09px;
+    color: #313131;
+    margin-bottom: 10px;
+}
+
+.container p {
+    font-family: Inter;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 24.2px;
+    color: #313131;
+    margin-bottom: 50px;
+}
+
+.container p:nth-child(5) {
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19.36px;
+
+}
+
+.sign-up {
+    background-color: #2F80ED;
+    border-radius: 6px;
+    font-size: 24px;
+    color: #ffffff;
+    padding: 5px 10px;
+    text-decoration: none;
+    display: block;
+    width: fit-content;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.login {
+    text-decoration:none;
+    border-bottom: 1.5px solid #313131;
+    color: #313131;
+}

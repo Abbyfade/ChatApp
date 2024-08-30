@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chatApp/style.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'chatApp/favicon.png' %}">
+</head>
+<body>
+    <div class="content">
+        <svg class="close-btn" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.4 14L0 12.6L5.6 7L0 1.4L1.4 0L7 5.6L12.6 0L14 1.4L8.4 7L14 12.6L12.6 14L7 8.4L1.4 14Z" fill="black"/>
+        </svg>
+        <h1>Register</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </div>
+</body>
+</html>

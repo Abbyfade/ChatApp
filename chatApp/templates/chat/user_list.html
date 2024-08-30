@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chatApp/user_list.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'chatApp/favicon.png' %}">
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img class="logo" src="{% static 'chatApp/lets-chat.png' %}" alt="">
+            <h1>Users</h1>
+            <img class="menu-btn" id="menuToggle" src="{% static 'chatApp/hamburger.png' %}" alt="">
+        </div>
+        {% for letter, users in grouped_users.items %}
+            <div class="user-group">
+                <h2>{{ letter }}</h2>
+                <ul class="user-list">
+                    {% for user in users %}
+                        <li>
+                            <a href="{% url 'start_chat' user.username %}">{{ user.username }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
