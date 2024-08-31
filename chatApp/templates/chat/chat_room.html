@@ -32,7 +32,7 @@
         const roomId = '{{ room_id }}';
         const username = '{{ username }}';
         const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/' + roomId + '/'
+            'wss://' + window.location.host + '/wss/chat/' + roomId + '/'
         );
         chatSocket.onopen = function (e) {
             console.log("The connection was setup successfully !");

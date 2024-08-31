@@ -54,7 +54,7 @@
             });
         });
 
-        const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat-list/`);
+        const chatSocket = new WebSocket(`wss://${window.location.host}/wss/chat-list/`);
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             if (data.type === 'chat_list_update') {

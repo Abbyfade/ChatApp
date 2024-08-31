@@ -80,9 +80,15 @@ WSGI_APPLICATION = 'chatRoom.wsgi.application'
 ASGI_APPLICATION = 'chatRoom.asgi.application'
 
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+    # "default": {
+    #     "BACKEND": "channels.layers.InMemoryChannelLayer"
+    # }
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": ["redis://red-cr96cfjv2p9s73b308mg:6379"],
+        },
+    },
 }
 
 
